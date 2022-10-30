@@ -4,49 +4,60 @@ import React, { useEffect, useState } from 'react';
 
 
 
+
 const App = () => {
   const [header]= useState('Weather App');
   const[weatherInfo,setWeatherData] = useState([]);
-  const [cityName,setCityName] = useState('');
+  const [cityLocation,setCityLocation] = useState('');
   
+  async function getWeatherData (){
+    //Pull data from api key from open weathermap website 
+   let weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityLocation}&appid=466b5c9748efb6f0d78ce0ea606ef8a1`;
+   fetch(weatherUrl)
+   .then(weatherData => weatherData.json())
+   .then(weatherData =>
+     //set data from url to weatherInfo 
+    setWeatherData(weatherData))
+    
+   }
+ 
+
   
+ 
+
+   //console.log(weatherInfo);
+
 
   useEffect( () =>{
-  getWeatherData();
+   
+getWeatherData();
+
+    //This is to check that use effect is being ran and where it renders
     console.log("useEffect ran...");
-    console.log(weatherInfo);
-},[]);
+   
+  },[]);
 
 
-function  getWeatherData (){
-  
-  //Fetch data from api key from open weathermap website based on what is typed in the search bar
-      const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=466b5c9748efb6f0d78ce0ea606ef8a1`;
-      fetch(weatherUrl)
-      .then(response => response.json())
-      .then(weatherData =>
-        setWeatherData(weatherData)
-      )
-      }
+ 
+
+
 
 const handleSubmit = e =>{
   e.preventDefault();
   getWeatherData();
-  //Sends an alert to show the city you entered and the method is at least running 
-  alert(`Submitting name: ${cityName}`);
+  //This checks the data being pulled from the website in the console to make sure everything is ok
+console.log(weatherInfo);
+ //weatherInfo.weather.map((info)=>{console.log(info.description)})
+  
+
 }
 
 
 
 
-/*This piece of code is to test that data is being pulled from the website
-it will pop up in the web dev console on the website when testing to see what pops up*/
-/*console.log(weatherInfo.name);
-console.log(weatherInfo.weather);
-weatherInfo.weather.map((data)=>{
-  console.log(data.description);
-})*/
+
   return (
+    
     <div className="App">
       <header className="App-header row">
      <h1 id="header">{header} </h1>   
@@ -56,22 +67,27 @@ weatherInfo.weather.map((data)=>{
       <div className="input-feild">
         <input placeholder='Enter name of city'
         type="text"
-        value={cityName}
-        onChange={e=>setCityName(e.target.value)}
+        value={cityLocation}
+        onChange={e=>setCityLocation(e.target.value)}
+        
         />
       </div>
      </form>
 
-     <div>
-      <h1>{weatherInfo.name}</h1>
      
-     </div>
 
      <div>
-      {weatherInfo.weather.map((data)=>{
-        <h1>data.description</h1>
-      })}
+      
+        <h1>{weatherInfo.name}</h1>
+        
+       
+
      </div>
+    <div>
+      
+    </div>
+    
+    
      
     </div>
   );
