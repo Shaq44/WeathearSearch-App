@@ -1,27 +1,40 @@
-import React,{useState} from 'react';
+import React from 'react';
 
-const Search = () =>{
-    const[cityName,setCityName] = useState('');
+
+class Search extends React.Component{
+    state={
+        city:''
+    }
 
   
+    handleChange = e =>{
+        this.setState({
+            city:e.target.value
+        })
+    }
 
-    const handleSubmit = e =>{
-        e.preventDefault();
-        alert(`Submitting name ${cityName}`)
-        //setCityName(e.target.cityName);
+ handleSubmit = e =>{
+    e.preventDefault();
+       this.props.getWeatherData(this.state.city);
+       this.setState({
+        city:'',
+        loading:false
+       })
         
     }
 
-    return(
-        <form onSubmit={handleSubmit}>
-            <label>
-                Search City:
-                <input type='text' value={cityName} onChange={e => setCityName(e.target.value)}/>
-                
-            </label>
-            <input type="submit" value="Submit"/>
+    render(){
+        return(
+        <form onSubmit={this.handleSubmit}>
+        
+            Search City:
+            <input type='text' value={this.state.city} onChange={this.handleChange}/>
+            <button>Search</button>
         </form>
-    )
+        )
+    }
+     
+    
 
 }
 

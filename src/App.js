@@ -1,98 +1,126 @@
 
 import './App.css';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import Search from './Components/Search'
 
 
 
 
-const App = () => {
-  const [header]= useState('Weather App');
-  const[weatherInfo,setWeatherData] = useState([]);
-  const [cityLocation,setCityLocation] = useState('');
-  
-  async function getWeatherData (){
-    //Pull data from api key from open weathermap website 
-   let weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityLocation}&appid=466b5c9748efb6f0d78ce0ea606ef8a1`;
-   fetch(weatherUrl)
-   .then(weatherData => weatherData.json())
-   .then(weatherData =>
-     //set data from url to weatherInfo 
-    setWeatherData(weatherData))
-    
-   }
- 
 
-  
- 
-
-   //console.log(weatherInfo);
+class app extends React.Component {
 
 
-  useEffect( () =>{
+
+  state={
+    header:'Weather App',
+    getWeatherData:[],
+    loading:false
+
+  }
+
+
    
-getWeatherData();
-
-    //This is to check that use effect is being ran and where it renders
-    console.log("useEffect ran...");
-   
-  },[]);
-
-
- 
-
-
-
-const handleSubmit = e =>{
-  e.preventDefault();
-  getWeatherData();
-  //This checks the data being pulled from the website in the console to make sure everything is ok
-console.log(weatherInfo);
- //weatherInfo.weather.map((info)=>{console.log(info.description)})
   
 
+
+  
+
+  
+
+componentDidMount(){
+  this.getWeatherData();
 }
 
+getWeatherData = async city =>{
+  //Pull data from api key from open weathermap website
+ 
+let weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=466b5c9748efb6f0d78ce0ea606ef8a1`;
+console.log(weatherUrl);
+ const weatherInfo = await fetch(weatherUrl);
+ const searchedInfo = await weatherInfo.json();
+ console.log(searchedInfo.weather);
+ this.setState({
+  getWeatherData:searchedInfo
+ })
+  
+
+
+  
+}
+   
 
 
 
 
-  return (
-    
+
+
+  render (){
+    console.log(this.state.getWeatherData)
+    const weather = this.state.getWeatherData.weather?.map((info)=>{
+     console.log(info.main)
+      return(
+        <div>
+          {info.description}
+          <img src={` http://openweathermap.org/img/wn/${info.icon}.png`}/>
+          
+        </div>
+
+       
+       
+        )
+    });
+
+    console.log(this.state.getWeatherData.main);
+
+   /* const temp = this.state.getWeatherData.main?.map((data)=>{
+      return(
+        <div>
+          {data.temp}
+          {data.humidity}
+         Lowest Temp: {data.temp_min}
+          Maximum Temp: {data.temp_max}
+        </div>
+      )
+    });*/
+    return(
+      <div>
     <div className="App">
       <header className="App-header row">
-     <h1 id="header">{header} </h1>   
+     <h1 id="header">{this.state.header} </h1>   
       </header>
 
-     <form onSubmit={handleSubmit}>
-      <div className="input-feild">
-        <input placeholder='Enter name of city'
-        type="text"
-        value={cityLocation}
-        onChange={e=>setCityLocation(e.target.value)}
-        
-        />
-      </div>
-     </form>
+    
+      
+  
+    
+     <div>
+     <Search getWeatherData={this.getWeatherData}/>
 
-     
+      
+     </div>
 
      <div>
-      
-        <h1>{weatherInfo.name}</h1>
-        
-       
-
+     { this.state.getWeatherData.name}
      </div>
-    <div>
+
+     <div>
+      {weather}
+     </div>
       
-    </div>
-    
-    
+      <div>
+      Temperature: {this.state.getWeatherData.main?.temp}
+      </div>
+   </div>
      
+
+     
+
     </div>
-  );
+
+    )
+  }
 }
 
 
-export default App;
+export default app;
 
