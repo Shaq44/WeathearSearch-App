@@ -60,10 +60,17 @@ console.log(weatherUrl);
      console.log(info.main)
       return(
         <div>
-          {info.description}
-          <img src={` http://openweathermap.org/img/wn/${info.icon}.png`}/>
-          
+          <div>
+          {info.description}   
+
+          </div>
+
+          <div>
+          <img src={` http://openweathermap.org/img/wn/${info.icon}.png`} alt="weatherIcon"/>
+          </div>       
         </div>
+
+        
 
        
        
@@ -72,48 +79,32 @@ console.log(weatherUrl);
 
     console.log(this.state.getWeatherData.main);
 
-   /* const temp = this.state.getWeatherData.main?.map((data)=>{
-      return(
-        <div>
-          {data.temp}
-          {data.humidity}
-         Lowest Temp: {data.temp_min}
-          Maximum Temp: {data.temp_max}
-        </div>
-      )
-    });*/
-    return(
-      <div>
-    <div className="App">
-      <header className="App-header row">
-     <h1 id="header">{this.state.header} </h1>   
-      </header>
-
     
-      
-  
+  return(
+  <div className="weather-app">
     
-     <div>
-     <Search getWeatherData={this.getWeatherData}/>
+    <header className="App-header row">
+    <h1 id="header">{this.state.header} </h1>   
+    </header>
 
-      
-     </div>
+    <div className="search-bar">
+     <Search  getWeatherData={this.getWeatherData}/>
+    </div>
+    
 
-     <div>
+     <div className="weather-card" >
+ 
      { this.state.getWeatherData.name}
-     </div>
-
-     <div>
-      {weather}
-     </div>
+       
+     {weather}
+     
       
-      <div>
-      Temperature: {this.state.getWeatherData.main?.temp}
-      </div>
-   </div>
-     
-
-     
+      
+     Temperature: {this.state.getWeatherData.main?.temp}
+      
+      <br></br>
+      Humidity: {this.state.getWeatherData.main?.humidity}
+     </div>
 
     </div>
 
